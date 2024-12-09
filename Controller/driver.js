@@ -134,3 +134,23 @@ exports.getAllDriver = async(req, res) => {
 
 
 
+
+
+
+
+
+
+
+exports.driverUpdateLocation = async(rew, res) => {
+    
+}
+
+
+
+
+
+
+
+
+
+
