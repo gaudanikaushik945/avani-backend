@@ -21,7 +21,7 @@ const io =initSocketIO(server)
 
 
 
-app.use(cors())
+app.use(cors({ origin: 'https://kaushik-react-gps.vercel.app' }));
   app.use(bodyParser.json())
 app.use(express.json())
 
