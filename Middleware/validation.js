@@ -12,8 +12,8 @@ const driverValidationSchema = Joi.object({
   rcBookNumber: Joi.string().alphanum().min(5).max(20).required(),
   isActive: Joi.string().default('active'),
   location: Joi.object({
-    lat: Joi.number().required(),
-    lon: Joi.number().required(),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
   }).required(),
 });
 

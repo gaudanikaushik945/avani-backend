@@ -4,32 +4,34 @@ const Driver = require("../Model/driver")
 
 
 // controller/locationController.js
-// exports.addLocation = async (driverId, latitude, longitude) => {
-//     try {
+exports.addLocation = async (driverId, latitude, longitude) => {
+    try {
 
-//         console.log("======latitude===",latitude );
+        console.log("======latitude===",latitude );
 
-//         console.log("===== longitude ======", longitude)
+        console.log("===== longitude ======", longitude)
         
         
-//         const data = {
-//             driverId: driverId,
-//             latitude: latitude,
-//             longitude: longitude
-//         };
+        const data = {
+            driverId: driverId,
+            latitude: latitude,
+            longitude: longitude
+        };
         
-//         console.log("++++++++++++++ data +++++++++++++++++", data)
+    
+        
+        console.log("++++++++++++++ data +++++++++++++++++", data)
         
       
-//         const addedLocation = await Location.create(data);
-//         console.log("Location added:", addedLocation);
+        const addedLocation = await Location.create(data);
+        console.log("Location added:", addedLocation);
 
-//         return { success: true, data: addedLocation };
-//     } catch (error) {
-//         console.error("Error adding location:", error);
-//         return { success: false, message: error.message };
-//     }
-// };
+        return { success: true, data: addedLocation };
+    } catch (error) {
+        console.error("Error adding location:", error);
+        return { success: false, message: error.message };
+    }
+};
 
 
 

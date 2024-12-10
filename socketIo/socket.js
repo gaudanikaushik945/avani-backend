@@ -1,70 +1,94 @@
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
-const locationController = require("../Controller/location");
+const Driver = require("../Model/driver");
 
-let io; // Declare io globally
-const cors = require("cors");
+let io;
 
 function initSocketIO(server) {
-  io = new Server(server, {
-    cors: {
-      origin: "http://localhost:3000", // Allow your React client to connect
-      methods: ["GET", "POST"],  // Allowed HTTP methods
-      allowedHeaders: ["my-custom-header"], // Optional: allow custom headers
-      credentials: true // Optional: allow credentials like cookies or authorization headers
-    }
-  });
+  io = new Server(server, { cors: { origin: "*" } }); // Ensure CORS settings match your requirements
 
-  // Middleware for JWT authentication
+  // Middleware for Socket.IO authentication
   io.use((socket, next) => {
-    const token = socket.handshake.auth.token; // Token passed during the handshake
-    if (token) {
-      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => { // Use your secret key here (environment variable recommended)
-        if (err) {
-          console.error('JWT Verification failed:', err);
-          return next(new Error('Authentication error'));
-        }
-        socket.user = decoded; // Store decoded user data on the socket
-        next();
-      });
-    } else {
-      next(new Error('Authentication error'));
+    try {
+      const token = socket.handshake.query.token || socket.handshake.headers["authorization"]?.split(" ")[1];
+      if (!token) throw new Error("Unauthorized: Token not provided");
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      socket.driverId = decoded.driverId;
+      next();
+    } catch (error) {
+      console.error("Authentication error:", error.message);
+      return next(new Error("Unauthorized"));
     }
   });
 
-  // Handle location updates and other events
-  io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+  io.on("connection", async (socket) => {
+    console.log("A new driver connected:", socket.driverId);
 
-    // Handle location sending from clients
-    socket.on('send-location', async (locationData) => {
-      try {
-        // Example validation (latitude and longitude)
-        if (locationData.latitude < -90 || locationData.latitude > 90 || locationData.longitude < -180 || locationData.longitude > 180) {
-          socket.emit('error', { message: 'Invalid latitude or longitude values' });
+    const socketId = socket.id;
+    try {
+      // Find and update the driver's socket ID
+      const driver = await Driver.findById(socket.driverId);
+      if (!driver) {
+        console.error("Driver not found:", socket.driverId);
+        socket.disconnect(true);
+        return;
+      }
+
+      driver.socket_id = socketId;
+      await driver.save();
+      console.log("Driver socket ID updated:", driver);
+
+      // Handle addLocation event
+      socket.on("addLocation", async (data) => {
+        console.log("Received location data:", data);
+
+        // Validate latitude and longitude
+        if (!data || data.latitude < -90 || data.latitude > 90 || data.longitude < -180 || data.longitude > 180) {
+          socket.emit("error", "Invalid latitude or longitude values");
           return;
         }
 
-        // Example of adding location data to a database
-        const response = await locationController.addLocation(locationData);
-        if (response.success) {
-          io.emit("locationUpdate", response.data);  // Emit location update to all clients
-        } else {
-          socket.emit("error", { message: response.message });
-        }
-      } catch (error) {
-        console.error('Error handling location:', error);
-        socket.emit('error', { message: 'An error occurred while processing the location' });
-      }
-    });
+        try {
+          const response = await Driver.findByIdAndUpdate(
+            socket.driverId,
+            { "location.latitude": data.latitude, "location.longitude": data.longitude },
+            { new: true } // Return updated document
+          );
+          console.log("Location updated:", response);
 
-    // Handle disconnection
-    socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.id);
+          // Notify all connected clients of the location update
+          io.emit("locationUpdate", response);
+        } catch (error) {
+          console.error("Error updating location:", error.message);
+          socket.emit("error", "Failed to update location");
+        }
+      });
+
+      // Handle update-location event
+      socket.on("update-location", async (data) => {
+        console.log("Received location update:", data);
+
+        try {
+          const updatedDriver = await Driver.findByIdAndUpdate(
+            socket.driverId,
+            { "location.latitude": data.latitude, "location.longitude": data.longitude },
+            { new: true }
+          );
+          console.log("Driver location updated:", updatedDriver);
+        } catch (error) {
+          console.error("Error updating driver location:", error.message);
+        }
+      });
+    } catch (error) {
+      console.error("Connection setup error:", error.message);
+      socket.disconnect(true);
+    }
+
+    socket.on("disconnect", () => {
+      console.log("Driver disconnected:", socket.driverId);
     });
   });
-
-  return io;
 }
 
 module.exports = { initSocketIO, io };

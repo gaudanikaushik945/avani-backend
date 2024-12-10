@@ -33,8 +33,8 @@ exports.registerDriver = async(req, res) => {
             rcBookNumber: req.body.rcBookNumber,
             isActive: req.body.isActive,
             location: {
-              lat: req.body.location.lat,  
-              lon: req.body.location.lon, 
+                latitude: req.body.location.latitude,  
+                longitude: req.body.location.longitude, 
             },
           };
 
@@ -141,9 +141,30 @@ exports.getAllDriver = async(req, res) => {
 
 
 
-exports.driverUpdateLocation = async(rew, res) => {
+exports.driverUpdateLocation = async(driverId, latitude, longitude) => {
+    try {
+
+        // console.log("======latitude===",latitude );
+
+        // console.log("===== longitude ======", longitude)
+        
+        
+      
+        
     
-}
+        
+        // console.log("++++++++++++++ data +++++++++++++++++", data)
+        
+      
+        const addedLocation = await Location.update(driverId,{"location.latitude": latitude, "location.longitude": longitude});
+        console.log("addedLocation ===============:", addedLocation);
+
+        return { success: true, data: addedLocation };
+    } catch (error) {
+        console.error("Error adding location:==========", error);
+        return { success: false, message: error.message };
+    }
+};
 
 
 

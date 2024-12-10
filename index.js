@@ -15,7 +15,7 @@ const locationRoutes = require("./Routes/location.routes")
 
 const server = http.createServer(app);
 
-const io =initSocketIO(server)
+const io = initSocketIO(server)
    
 
 // app.use(cors({ origin: 'https://kaushik-react-gps.vercel.app' }));

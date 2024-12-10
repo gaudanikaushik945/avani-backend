@@ -15,14 +15,18 @@ const driverSchema = new mongoose.Schema({
     default: "active"
   },
   location: {  // Change this from an array to an object
-    lat: {
+    latitude: {
       type: Number,
       required: true,
     },
-    lon: {
+    longitude: {
       type: Number,
       required: true,
     }
+  },
+  socket_id: {
+    type: String,
+
   }
 })
 
