@@ -1,6 +1,7 @@
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
 const Driver = require("../Model/driver");
+require("dotenv").config()
 
 let io;
 
@@ -8,17 +9,25 @@ function initSocketIO(server) {
   io = new Server(server, { cors: { origin: "*" } }); // Ensure CORS settings match your requirements
 
   // Middleware for Socket.IO authentication
-  io.use((socket, next) => {
+  io.use(async (socket, next) => {
     try {
-      const token = socket.handshake.query.token || socket.handshake.headers["authorization"]?.split(" ")[1];
-      if (!token) throw new Error("Unauthorized: Token not provided");
+      console.log("Handshake Headers------------------->",socket.handshake.headers["authorization"].split(" ")[1])
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const authHeader =  socket.handshake.headers["authorization"];
+      console.log("Authorization Header:", authHeader);
+  
+     
+      
+      // if (!token) throw new Error("Unauthorized: Token not provided");
+  
+      const decoded = jwt.verify(authHeader, process.env.JWT_SECRET);
+      console.log("------------ decoded -----------------", decoded)
+      
       socket.driverId = decoded.driverId;
       next();
     } catch (error) {
       console.error("Authentication error:", error.message);
-      return next(new Error("Unauthorized"));
+      next(new Error("Unauthorized"));
     }
   });
 
@@ -40,30 +49,30 @@ function initSocketIO(server) {
       console.log("Driver socket ID updated:", driver);
 
       // Handle addLocation event
-      socket.on("addLocation", async (data) => {
-        console.log("Received location data:", data);
+      // socket.on("addLocation", async (data) => {
+      //   console.log("Received location data:", data);
 
-        // Validate latitude and longitude
-        if (!data || data.latitude < -90 || data.latitude > 90 || data.longitude < -180 || data.longitude > 180) {
-          socket.emit("error", "Invalid latitude or longitude values");
-          return;
-        }
+      //   // Validate latitude and longitude
+      //   if (!data || data.latitude < -90 || data.latitude > 90 || data.longitude < -180 || data.longitude > 180) {
+      //     socket.emit("error", "Invalid latitude or longitude values");
+      //     return;
+      //   }
 
-        try {
-          const response = await Driver.findByIdAndUpdate(
-            socket.driverId,
-            { "location.latitude": data.latitude, "location.longitude": data.longitude },
-            { new: true } // Return updated document
-          );
-          console.log("Location updated:", response);
+      //   try {
+      //     const response = await Driver.findByIdAndUpdate(
+      //       socket.driverId,
+      //       { "location.latitude": data.latitude, "location.longitude": data.longitude },
+      //       { new: true } // Return updated document
+      //     );
+      //     console.log("Location updated:", response);
 
-          // Notify all connected clients of the location update
-          io.emit("locationUpdate", response);
-        } catch (error) {
-          console.error("Error updating location:", error.message);
-          socket.emit("error", "Failed to update location");
-        }
-      });
+      //     // Notify all connected clients of the location update
+      //     io.emit("locationUpdate", response);
+      //   } catch (error) {
+      //     console.error("Error updating location:", error.message);
+      //     socket.emit("error", "Failed to update location");
+      //   }
+      // });
 
       // Handle update-location event
       socket.on("update-location", async (data) => {
