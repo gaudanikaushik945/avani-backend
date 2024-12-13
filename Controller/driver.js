@@ -10,7 +10,7 @@ exports.registerDriver = async(req, res) => {
     try {
         console.log("+++++++++++++++++mobileNumber++++++++++++++++++++++++++");
         
-        const findDriver = await Driver.findOne({mobileNumber: req.body.mobileNumber,rcBookNumber: req.body.rcBookNumber})
+        const findDriver = await Driver.findOne({mobileNumber: req.body.mobileNumber})
         console.log("+++++++++++ findDriver ++++++++++++++++", findDriver);
         if (findDriver) {
             return res.status(400),json({
