@@ -10,14 +10,14 @@ exports.registerDriver = async(req, res) => {
     try {
         console.log("+++++++++++++++++mobileNumber++++++++++++++++++++++++++");
         
-        const findDriver = await Driver.findOne({mobileNumber: req.body.mobileNumber})
-        console.log("+++++++++++ findDriver ++++++++++++++++", findDriver);
-        if (findDriver) {
-            return res.status(400),json({
-                data: false,
-                message: "Driver is already registered with this mobile number."
-            })
-        }
+        // const findDriver = await Driver.findOne({mobileNumber: req.body.mobileNumber})
+        // console.log("+++++++++++ findDriver ++++++++++++++++", findDriver);
+        // if (findDriver) {
+        //     return res.status(400),json({
+        //         data: false,
+        //         message: "Driver is already registered with this mobile number."
+        //     })
+        // }
 
         // if (!location || !location.lat || !location.lon) {
         //     return res.status(400).json({ message: "Location (lat and lon) is required." });
