@@ -19,8 +19,14 @@ const io = initSocketIO(server)
    
 
 // app.use(cors({ origin: 'https://kaushik-react-gps.vercel.app' }));
-app.use(cors());
-  app.use(bodyParser.json())
+const corsOptions = {
+  origin: "*", // Allow all origins
+  methods: ["GET", "POST", "PUT", "DELETE"], // Add the HTTP methods you want to allow
+  credentials: true, // For cookies/authorization headers
+};
+
+app.use(cors());  
+app.use(bodyParser.json())
 app.use(express.json())
 
 
@@ -29,12 +35,17 @@ app.use("/api", driverRoutes)
 app.use("/api", locationRoutes)
 
 
+
+
+
+
 app.get("/", (req, res) => {
-    res.send(`------------ localhost serverside connected successfully ---------------- https://localhost:${process.env.PORT_NUMBER}`)
+  res.send(`------------ localhost serverside connected successfully ---------------- https://localhost:${process.env.PORT_NUMBER}`)
 })
+
+
 
 
 server.listen(process.env.PORT_NUMBER, () => {
     console.log(`------------ localhost connected successfully ---------------- https://localhost:${process.env.PORT_NUMBER}`)
 })
-

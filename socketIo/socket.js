@@ -11,9 +11,9 @@ function initSocketIO(server) {
   // Middleware for Socket.IO authentication
   io.use(async (socket, next) => {
     try {
-      console.log("Handshake Headers------------------->",socket.handshake.headers["authorization"].split(" ")[1])
+      console.log("Handshake Headers------------------->",socket.handshake.headers["authorization"].split("")[1])
 
-      const authHeader =  socket.handshake.headers["authorization"];
+      const authHeader = socket.handshake.headers["authorization"];
       console.log("Authorization Header:", authHeader);
   
      
@@ -48,31 +48,7 @@ function initSocketIO(server) {
       await driver.save();
       console.log("Driver socket ID updated:", driver);
 
-      // Handle addLocation event
-      // socket.on("addLocation", async (data) => {
-      //   console.log("Received location data:", data);
-
-      //   // Validate latitude and longitude
-      //   if (!data || data.latitude < -90 || data.latitude > 90 || data.longitude < -180 || data.longitude > 180) {
-      //     socket.emit("error", "Invalid latitude or longitude values");
-      //     return;
-      //   }
-
-      //   try {
-      //     const response = await Driver.findByIdAndUpdate(
-      //       socket.driverId,
-      //       { "location.latitude": data.latitude, "location.longitude": data.longitude },
-      //       { new: true } // Return updated document
-      //     );
-      //     console.log("Location updated:", response);
-
-      //     // Notify all connected clients of the location update
-      //     io.emit("locationUpdate", response);
-      //   } catch (error) {
-      //     console.error("Error updating location:", error.message);
-      //     socket.emit("error", "Failed to update location");
-      //   }
-      // });
+   
 
       // Handle update-location event
       socket.on("update-location", async (data) => {
@@ -101,3 +77,39 @@ function initSocketIO(server) {
 }
 
 module.exports = { initSocketIO, io };
+
+
+
+
+
+
+
+
+
+
+
+   // Handle addLocation event
+      // socket.on("addLocation", async (data) => {
+      //   console.log("Received location data:", data);
+
+      //   // Validate latitude and longitude
+      //   if (!data || data.latitude < -90 || data.latitude > 90 || data.longitude < -180 || data.longitude > 180) {
+      //     socket.emit("error", "Invalid latitude or longitude values");
+      //     return;
+      //   }
+
+      //   try {
+      //     const response = await Driver.findByIdAndUpdate(
+      //       socket.driverId,
+      //       { "location.latitude": data.latitude, "location.longitude": data.longitude },
+      //       { new: true } // Return updated document
+      //     );
+      //     console.log("Location updated:", response);
+
+      //     // Notify all connected clients of the location update
+      //     io.emit("locationUpdate", response);
+      //   } catch (error) {
+      //     console.error("Error updating location:", error.message);
+      //     socket.emit("error", "Failed to update location");
+      //   }
+      // });
