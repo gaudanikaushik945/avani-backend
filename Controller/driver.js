@@ -8,6 +8,8 @@ require("dotenv").config()
 
 exports.registerDriver = async(req, res) => {
     try {
+        console.log("+++++++++++++++++mobileNumber++++++++++++++++++++++++++");
+        
         const findDriver = await Driver.findOne({mobileNumber: req.body.mobileNumber,rcBookNumber: req.body.rcBookNumber})
         console.log("+++++++++++ findDriver ++++++++++++++++", findDriver);
         if (findDriver) {
