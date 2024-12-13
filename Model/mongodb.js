@@ -1,7 +1,6 @@
 const mongoose = require("mongoose")
 require("dotenv").config()
 
-mongoose.set('debug+++++++++++++++++++++++++++', true);
 
 
 mongoose.connect("mongodb+srv://kaushikgaudani945:X4YfqjM4xQtSGtKl@cluster0.b9cns.mongodb.net/gpstracker?retryWrites=true&w=majority", 
