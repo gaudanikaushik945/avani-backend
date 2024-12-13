@@ -10,7 +10,7 @@ exports.verifyToken = async (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, "process.env.JWT_SECRET");
         req.driver = decoded;
 
        
@@ -53,7 +53,7 @@ exports.verifyToken123456 = async (req, res, next) => {
         const token = await authHeader.split(' ')[1];
         console.log("-----token----==================== ", token);
 
-        const jwtToken = jwt.verify(token, process.env.JWT_SECRET);
+        const jwtToken = jwt.verify(token, "process.env.JWT_SECRET");
         console.log("-----jwtToken------", jwtToken);
 
         if (!jwtToken) {

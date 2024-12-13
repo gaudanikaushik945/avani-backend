@@ -85,7 +85,7 @@ exports.loginDriver = async(req, res) => {
         }
 
 
-        const driverToken = jwt.sign({driverId: findDriver._id, mobileNumber: findDriver.mobileNumber}, process.env.JWT_SECRET,  { expiresIn: "24h" })
+        const driverToken = jwt.sign({driverId: findDriver._id, mobileNumber: findDriver.mobileNumber}, "process.env.JWT_SECRET",  { expiresIn: "24h" })
         console.log("----------- driverToken ---------------------", driverToken);
        
         findDriver.token = driverToken;

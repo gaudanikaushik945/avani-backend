@@ -20,7 +20,7 @@ function initSocketIO(server) {
       
       // if (!token) throw new Error("Unauthorized: Token not provided");
   
-      const decoded = jwt.verify(authHeader, process.env.JWT_SECRET);
+      const decoded = jwt.verify(authHeader, "process.env.JWT_SECRET");
       console.log("------------ decoded -----------------", decoded)
       
       socket.driverId = decoded.driverId;
