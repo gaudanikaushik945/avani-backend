@@ -19,11 +19,11 @@ const io = initSocketIO(server)
    
 
 // app.use(cors({ origin: 'https://kaushik-react-gps.vercel.app' }));
-const corsOptions = {
-  origin: "*", // Allow all origins
-  methods: ["GET", "POST", "PUT", "DELETE"], // Add the HTTP methods you want to allow
-  credentials: true, // For cookies/authorization headers
-};
+// const corsOptions = {
+//   origin: "*", // Allow all origins
+//   methods: ["GET", "POST", "PUT", "DELETE"], // Add the HTTP methods you want to allow
+//   credentials: true, // For cookies/authorization headers
+// };
 
 app.use(cors());  
 app.use(bodyParser.json())
