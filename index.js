@@ -40,12 +40,12 @@ app.use("/api", locationRoutes)
 
 
 app.get("/", (req, res) => {
-  res.send(`------------ localhost serverside connected successfully ---------------- https://localhost:${8000}`)
+  res.send(`------------ localhost serverside connected successfully ---------------- https://localhost:${3000}`)
 })
 
 
 
 
-server.listen(8000, () => {
-    console.log(`------------ localhost connected successfully ---------------- https://localhost:${8000}`)
+server.listen(3000, () => {
+    console.log(`------------ localhost connected successfully ---------------- https://localhost:${3000}`)
 })
