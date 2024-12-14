@@ -8,7 +8,7 @@ let io;
 function initSocketIO(server) {
   io = new Server(server, { 
     cors:{
-      origin:"*",
+      origin:"https://avani-backend.vercel.app",
       methods: ['GET', 'POST'], // Allowed HTTP methods
 
     }
