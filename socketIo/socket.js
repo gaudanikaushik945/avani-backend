@@ -8,9 +8,8 @@ let io;
 function initSocketIO(server) {
   io = new Server(server, { 
     cors:{
-      origin:"https://avani-backend.vercel.app",
-      methods: ['GET', 'POST'], // Allowed HTTP methods
-
+      origin:"https://avani-backend.vercel.app/socket",
+      methods: ['GET', 'POST']
     }
   }); // Ensure CORS settings match your requirements
 
