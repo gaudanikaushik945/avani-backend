@@ -6,7 +6,7 @@ require("dotenv").config()
 let io;
 
 function initSocketIO(server) {
-  io = new Server(server, { cors: { origin: "*" } }); // Ensure CORS settings match your requirements
+  io = new Server(server); // Ensure CORS settings match your requirements
 
   // Middleware for Socket.IO authentication
   io.use(async (socket, next) => {
