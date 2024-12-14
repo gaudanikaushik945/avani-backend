@@ -4,7 +4,7 @@ require("dotenv").config()
 
 
 mongoose.connect("mongodb+srv://kaushikgaudani945:X4YfqjM4xQtSGtKl@cluster0.b9cns.mongodb.net/gpstracker?retryWrites=true&w=majority", 
-{ serverSelectionTimeoutMS: 30000 }
+{  useNewUrlParser: true }
 )
 .then(() => {
     console.log(`===== mongodb database connection successfully ======== ${"mongodb+srv://kaushikgaudani945:X4YfqjM4xQtSGtKl@cluster0.b9cns.mongodb.net/gpstracker"}` );
