@@ -7,6 +7,7 @@ let io;
 
 function initSocketIO(server) {
   io = new Server(server, { 
+    path:"https://avani-backend.vercel.app/socket",
     cors:{
       origin:"https://avani-backend.vercel.app/socket",
       methods: ['GET', 'POST']
