@@ -9,7 +9,8 @@ function initSocketIO(server) {
   io = new Server(server, { 
     path:"/socket",addTrailingSlash: false,
     cors:{
-      origin:"*"
+      origin:"*",
+      credentials: true
     }
   }); // Ensure CORS settings match your requirements
 
