@@ -1,12 +1,19 @@
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
 const Driver = require("../Model/driver");
+const socket = require("../../tracker-map/kaushik-backend/socketIo/socket");
 require("dotenv").config()
 
 let io;
 
 function initSocketIO(server) {
-  io = new Server(server); // Ensure CORS settings match your requirements
+  io = new Server(server, { 
+    cors:{
+      origin:"*",
+      methods: ['GET', 'POST'], // Allowed HTTP methods
+
+    }
+  }); // Ensure CORS settings match your requirements
 
   // Middleware for Socket.IO authentication
   io.use(async (socket, next) => {
@@ -14,7 +21,7 @@ function initSocketIO(server) {
       console.log("Handshake Headers------------------->",socket.handshake.headers["authorization"].split("")[1])
 
       const authHeader = socket.handshake.headers["authorization"];
-      console.log("Authorization Header:", authHeader);
+      console.log("Authorization Header: ++++++++", authHeader)
   
      
       
@@ -32,6 +39,7 @@ function initSocketIO(server) {
   });
 
   io.on("connection", async (socket) => {
+
     console.log("A new driver connected:", socket.driverId);
 
     const socketId = socket.id;
