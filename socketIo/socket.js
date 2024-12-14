@@ -10,9 +10,10 @@ function initSocketIO(server) {
     path: "/socket", 
     addTrailingSlash: false,
     cors: {
-      origin: "*", // Update to specific origin if needed
+      origin: "https://avani-backend.vercel.app", // Update to specific origin if needed
       credentials: true,
     },
+    
   });
 
   // Middleware for Socket.IO authentication
