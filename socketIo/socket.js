@@ -1,7 +1,6 @@
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
 const Driver = require("../Model/driver");
-const socket = require("../../tracker-map/kaushik-backend/socketIo/socket");
 require("dotenv").config()
 
 let io;
@@ -21,7 +20,7 @@ function initSocketIO(server) {
       console.log("Handshake Headers------------------->",socket.handshake.headers["authorization"].split("")[1])
 
       const authHeader = socket.handshake.headers["authorization"];
-      console.log("Authorization Header: ++++++++", authHeader)
+      console.log("Authorization Header ++++++++", authHeader)
   
      
       
